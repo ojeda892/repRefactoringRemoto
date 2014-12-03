@@ -27,32 +27,14 @@ public class Customer {
 		double totalAmount			=0;
 		int frequentRenterPoints	=0;
 		Enumeration rentals			=_rentals.elements();
-		String result				= "Rental Record for" + getName()+"\n";
+		String result				= "Rental Record for " + getName()+"\n";
 		
 		while (rentals.hasMoreElements())
 		{
 			double thisAmount	= 0;
 			Rental each			= (Rental) rentals.nextElement();
 			
-			//determine amounts for each line
-			switch (each.getMovie().getPriceCode())
-			{
-				case Movie.REGULAR: 
-					thisAmount += 2;
-					if (each.getDaysRented() > 2)
-						thisAmount += (each.getDaysRented()-2) * 1.5;
-					break;
-				
-				case Movie.NEW_RELEASE:
-					thisAmount += each.getDaysRented() * 3;
-					break;
-					
-				case Movie.CHILDRENS:
-					thisAmount += 1.5;
-					if (each.getDaysRented()>3)
-						thisAmount += (each.getDaysRented()-3) * 1.5;
-					break;
-			}
+			thisAmount = amountFor(thisAmount, each);
 			
 			//add frequent renter points
 			frequentRenterPoints++;
@@ -73,5 +55,12 @@ public class Customer {
 		
 		return result;
 		
+	}
+
+	/**
+	 * @deprecated Use {@link videoStore.Rental#amountFor(double)} instead
+	 */
+	private double amountFor(double thisAmount, Rental aRental) {
+		return aRental.amountFor(thisAmount);
 	}
 }
